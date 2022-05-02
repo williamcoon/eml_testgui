@@ -10,19 +10,23 @@ TAG = "Tcp Handler"
 
 class BasicProtocol(protocol.Protocol):
 
+    def __init__(self):
+        super().__init__()
+        self.response = None
+
     def connectionMade(self):
         logging.info(f"{TAG} - New TCP connection")
-        self.factory.clients.append(self)
 
     def connectionLost(self, reason: failure.Failure = protocol.connectionDone):
         logging.info(f"{TAG} - Connection lost: {reason}")
-        try:
-            self.factory.clients.remove(self)
-        except ValueError:
-            pass
 
     def dataReceived(self, data: bytes):
-        logging.info(f"{TAG} - Data received: {data.decode('utf-8')}")
+        self.response = data.decode('utf-8')
+        logging.info(f"{TAG} - Data received: {self.response}")
+
+    def write(self, data: bytes):
+        self.response = None
+        self.transport.write(data=data)
 
 
 class TCPHandler:
@@ -30,15 +34,27 @@ class TCPHandler:
     def __init__(self):
         self.factory = protocol.ClientFactory()
         self.factory.protocol = BasicProtocol
-        self.factory.clients = []
+        # self.factory.clients = []
+        self.factory.client = None
 
     def tcp_listen(self):
         reactor.listenTCP(TCP_PORT, self.factory)
         reactor.run(installSignalHandlers=0)
 
-    def broadcast(self, message, newline=True):
-        logging.info(f"{TAG} - Broadcasting: {message}")
+    def send(self, message, newline=True):
+        logging.info(f"{TAG} - Sending: {message}")
         if newline:
             message = message + "\n"
-        for client in self.factory.clients:
-            client.transport.write(data=message.encode('utf-8'))
+        if self.factory.client is not None:
+            self.factory.client.write(data=message.encode('utf-8'))
+            return True
+        else:
+            logging.info("No client connected.")
+            return False
+
+    def get_response(self):
+        if self.factory.client is not None:
+            return self.factory.client.response
+
+    def is_connected(self):
+        return self.factory.client is not None
