@@ -16,9 +16,11 @@ class BasicProtocol(protocol.Protocol):
 
     def connectionMade(self):
         logging.info(f"{TAG} - New TCP connection")
+        self.factory.client = self
 
     def connectionLost(self, reason: failure.Failure = protocol.connectionDone):
         logging.info(f"{TAG} - Connection lost: {reason}")
+        self.factory.client = None
 
     def dataReceived(self, data: bytes):
         self.response = data.decode('utf-8')

@@ -184,13 +184,25 @@ class MainGUI(QtWidgets.QMainWindow):
         message = HummingBirdMessages.SAVE_RECIPE.value
         message += self.recipe_name_txt.text()
         for recipe_input in self.recipe_inputs:
-            message += f", {recipe_input.input_txt.text()}"
+            message += f",{recipe_input.input_txt.text()}"
         self.sender.send_message(message)
 
     def load_recipe_btn_clicked(self):
         message = HummingBirdMessages.LOAD_RECIPE.value
         message += self.saved_recipes.currentText()
-        self.sender.send_message(message)
+        recipe = self.sender.send_message(message)
+        if recipe is None:
+            return
+
+        self.recipe_name_txt.setText(self.saved_recipes.currentText())
+        recipe_values = recipe.split(",")
+        if len(recipe_values) != len(self.recipe_inputs):
+            logging.error(f"Wrong number of recipe value returned: {len(recipe_values)} "
+                          f"Expected: {len(self.recipe_inputs)}")
+        index = 0
+        for recipe_input in self.recipe_inputs:
+            recipe_input.input_txt.setText(recipe_values[index])
+            index += 1
 
     def set_recipe_btn_clicked(self):
         message = HummingBirdMessages.SET_CURRENT_RECIPE.value
@@ -199,7 +211,9 @@ class MainGUI(QtWidgets.QMainWindow):
 
     def request_recipe_list(self):
         message = HummingBirdMessages.LIST_RECIPES.value
-        self.sender.send_message(message)
+        recipes = self.sender.send_message(message)
+        recipe_list = recipes.split(",")
+        self.set_recipe_list(recipe_list)
 
     def set_recipe_list(self, recipe_list):
         self.saved_recipes.clear()

@@ -14,4 +14,7 @@ class HummingBirdMessages(enum.Enum):
     SAVE_RECIPE = f"{RECIPE}:SAVE: "
     LOAD_RECIPE = f"{RECIPE}:LOAD: "
     LIST_RECIPES = f"{RECIPE}:LIST "
-    SET_CURRENT_RECIPE = f"{RECIPE}:SET: "
+
+    # Configuration Commands
+    CONFIG = ":CONFig"
+    SET_CURRENT_RECIPE = f"{CONFIG}:SETRecipe: "
