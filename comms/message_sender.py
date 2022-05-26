@@ -3,7 +3,7 @@ from utils.time_utils import millis
 from comms.tcp_handler import TCPHandler
 import logging
 TAG = "Message Sender"
-RESPONSE_TIMEOUT = 2000
+RESPONSE_TIMEOUT = 5000
 
 
 class MessageSender:
