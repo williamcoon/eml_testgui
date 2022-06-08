@@ -8,7 +8,7 @@ class HummingBirdMessages(enum.Enum):
     MOTION = ":MOTIon"
     START = f"{MOTION}:START"
     PAUSE = f"{MOTION}:PAUSE"
-    HOME = f"{MOTION}:HOME"
+    HOME = f"{MOTION}:HOMEall"
     SET_CURRENT_RECIPE = f"{MOTION}:SELEctRecipe: "
 
     # Recipe Commands

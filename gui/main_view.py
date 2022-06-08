@@ -108,8 +108,13 @@ class MainGUI(QtWidgets.QMainWindow):
         self.x_spacing_input = LabeledInputGrid("X Spacing", LENGTH_UNIT)
         self.y_spacing_input = LabeledInputGrid("Y Spacing", LENGTH_UNIT)
         self.z_plunge_depth = LabeledInputGrid("Z Plunge Depth", LENGTH_UNIT)
-        self.max_speed = LabeledInputGrid("Maximum speed", SPEED_UNIT)
-        self.max_accel = LabeledInputGrid("Maximum Acceleration", ACCELERATION_UNIT)
+        self.max_speed_x = LabeledInputGrid("Maximum speed X", SPEED_UNIT)
+        self.max_speed_y = LabeledInputGrid("Maximum speed Y", SPEED_UNIT)
+        self.max_speed_z = LabeledInputGrid("Maximum speed Z", SPEED_UNIT)
+        self.max_accel_x = LabeledInputGrid("Maximum Acceleration X", ACCELERATION_UNIT)
+        self.max_accel_y = LabeledInputGrid("Maximum Acceleration Y", ACCELERATION_UNIT)
+        self.max_accel_z = LabeledInputGrid("Maximum Acceleration Z", ACCELERATION_UNIT)
+
         self.dispense_time = LabeledInputGrid("Dispense Time", "s")
 
         self.recipe_inputs.append(self.x_origin_input)
@@ -121,8 +126,12 @@ class MainGUI(QtWidgets.QMainWindow):
         self.recipe_inputs.append(self.x_spacing_input)
         self.recipe_inputs.append(self.y_spacing_input)
         self.recipe_inputs.append(self.z_plunge_depth)
-        self.recipe_inputs.append(self.max_speed)
-        self.recipe_inputs.append(self.max_accel)
+        self.recipe_inputs.append(self.max_speed_x)
+        self.recipe_inputs.append(self.max_speed_y)
+        self.recipe_inputs.append(self.max_speed_z)
+        self.recipe_inputs.append(self.max_accel_x)
+        self.recipe_inputs.append(self.max_accel_y)
+        self.recipe_inputs.append(self.max_accel_z)
         self.recipe_inputs.append(self.dispense_time)
 
         recipe_inputs_widget = QtWidgets.QWidget()
@@ -251,7 +260,7 @@ class MainGUI(QtWidgets.QMainWindow):
             self.saved_recipes.addItem(recipe)
         self.saved_recipes.setCurrentIndex(0)
         # Load the current recipe
-        self.load_recipe_btn_clicked()
+        # self.load_recipe_btn_clicked()
 
     def __del__(self):
         sys.stdout = sys.__stdout__
